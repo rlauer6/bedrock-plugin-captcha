@@ -97,6 +97,14 @@ The relevant configuration values here are:
     folders. You can set the folders after instantiation of the class
     using the `output_folder()` and `data_folder()` methods.
 
+- use\_session
+
+    Boolean that determines if the session directory should be used for
+    storing the Captcha image. If this is set to a true value, then
+    `output_path` is ignored.
+
+    default: false
+
 Configure these values based on your needs.  Since the
 `output_folder` will serve up your graphic, it will require
 appropriate permissions.
@@ -110,11 +118,19 @@ webserver to serve files from a user's session directory.
 
 Using session directories has a couple of advantages:
 
-- restricts access of the captcha image to a specific user
+- restricts access of the Captcha image to a specific user
 - session directories can be cleaned up automatically up after a session expires
 - using a session directory that is accessible by multiple
 webserver nodes (an NFS or EFS mount e.g) will help create a stateless
 webnode
+
+If you use the session directory as your Captcha image directory and
+are using [Bedrock::Apache::BedrockSessionFiles](https://metacpan.org/pod/Bedrock%3A%3AApache%3A%3ABedrockSessionFiles) handler to serve
+content from session directories by default the handler will attempt
+to verify that there exists a login session for the user. If you want
+to allow anonymous sessions when using this plugin, you will need to
+configure the handler so that it does not verify that user has a login
+session.
 
 See [Bedrock::Apache::BedrockSessionFiles](https://metacpan.org/pod/Bedrock%3A%3AApache%3A%3ABedrockSessionFiles) for details on setting up
 session directories.
@@ -126,7 +142,8 @@ session directories.
 image( \[num-digits\] )
 
 Creates and returns the name of an image composed of `num-digits`
-characters and sets the `md5sum` element of the object. **This method is not designed to be used directly.**
+characters and sets the `md5sum` element of the object. **This method
+is not designed to be used directly.**
 
 _Use `image_url()` to return the URL of the image._
 
@@ -159,7 +176,10 @@ code instead of a return code.
 
 ## image\_url
 
-Returns the URL for the captcha image.
+Returns the URL for the Captcha image.  The URL is a mash-up of the
+path to the image and the value you set for `image_url` in the
+configuration file.  If you set `use_session` to 1, then then
+`image_url` setting is not used.
 
 ## verify\_or\_reset\_image
 
