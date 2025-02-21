@@ -1,0 +1,12 @@
+<object>
+  <scalar name="binding">captcha</scalar>
+  <scalar name="module">BLM::Startup::Captcha</scalar>
+  <object name="config">
+    <scalar name="verbose">2</scalar>
+    <scalar name="default_length">5</scalar>
+    <scalar name="data_folder">/tmp</scalar>
+    <scalar name="output_folder">/var/www/html</scalar>
+    <scalar name="image_url"></scalar>
+    <scalar name="use_session">1</scalar>
+ </object>
+</object>

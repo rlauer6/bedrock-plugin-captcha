@@ -1,0 +1,12 @@
+{
+   "repository" : {
+      "web" : "http://github.com/rlauer6/bedrock-plugin.captcha",
+      "url" : "git://github.com/rlauer6/bedrock-plugin-captcha.git",
+      "type" : "git"
+   },
+   "homepage" : "http://github.com/rlauer6/bedrock-plugin-captcha.git",
+   "bugtracker" : {
+      "web" : "http://github.com/rlauer6/bedrock-plugin-captcha/issues",
+      "mailto" : "rlauer6@comcast.net"
+   }
+}

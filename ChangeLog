@@ -1,0 +1,98 @@
+Thu Feb 20 09:00:54 2025  Rob Lauer  <rlauer6@comcast.net>
+
+	[2.0.0 - repackaging]:
+	* ChangeLog: new
+	* Makefile: new
+	* NEWS.md: new
+	* README.md: new
+	* buildspec.yml: new
+	* captcha.xml: new
+	* extra-files: new
+	* lib/BLM/Startup/Captcha.pm: new
+	* requires: new
+	* test-requires: new
+	* captcha.roc: new
+
+2018-05-16  Rob Lauer <rlauer6@comcast.net>
+
+	RELEASED: libbedrock-captcha-perl 1.1.0-7
+
+	[ session directory, etc]:
+	* autotools/ax_rpmbuild_check.m4: new
+	* NEWS.md: from NEWS
+	* README.md: from README
+	* .gitignore
+	* Makefile.am
+	* bootstrap: automake 2.13
+	* configure: removed
+	* configure.ac
+	- bump version
+	- AX_RPMBUILD_CHECK
+	* directories.inc: removed apache refs
+	* libbedrock-captcha-perl.spec.in: likewise
+	* release: bump
+	* src/main/bedrock/config/Makefile.am: install captcha to /usr/local/share
+	* src/main/bedrock/config/captcha.xml.in: remove placeholders
+	* src/main/bedrock/htdocs/Makefile.am: install example to /usr/local/share
+	* src/main/bedrock/htdocs/captcha-example.roc: get_md5sum()
+	* src/main/perl/lib/BLM/Startup/Captcha.pm.in
+	(init_plugin): new
+	(image_url): image_path
+	(pod): updated
+	* src/main/perl/lib/Makefile.am: RPMBUILD_ENABLED
+
+2012-10-23  Rob Lauer <rlauer6@comcast.net>
+
+	* configure.ac: bump version for next dev cycle
+	* NEWS: prep for next release
+
+	RELEASED: libbedrock-captcha-perl 1.0.1
+
+	* NEWS: set release date
+	* configure.ac: bump version for release
+
+2012-10-19  Rob Lauer <rlauer6@comcast.net>
+
+	* autotools/bedrock_config.m4: AC_DEFUN
+	* src/main/perl/lib/BLM/Startup/Captcha.pm.in
+	(verify_text): return text from hash
+
+2012-10-07  Rob Lauer <rlauer6@comcast.net>
+
+	* configure.ac
+	- bump version for next dev cycle
+	- use BEDROCK_CONFIG_MACRO
+	* NEWS: reset release date
+
+	RELEASED: libbedrock-captcha-perl 1.0.0
+
+	* configure.ac: bump version for release
+	* NEWS: set release date
+
+2012-10-06  Rob Lauer <rlauer6@comcast.net>
+
+	[Project rebirth]:
+	* AUTHORS: new
+	* autotools/ads_PERL_INCLUDES.m4: new
+	* autotools/ads_PERL_LIBDIR.m4: new
+	* autotools/ads_PERL_MODULE.m4: new
+	* autotools/ads_PROG_PERL.m4: new
+	* autotools/apache_config.m4: new
+	* autotools/bedrock_config.m4: new
+	* ChangeLog: new
+	* configure.ac: new
+	* directories.inc: new
+	* INSTALL: new
+	* Makefile.am: new
+	* NEWS: new
+	* README: new
+	* src/Makefile.am: new
+	* src/main/Makefile.am: new
+	* src/main/perl/Makefile.am: new
+	* src/main/perl/lib/Makefile.am: new
+	* src/main/perl/lib/BLM/Startup/Captcha.pm.in: new
+	* src/main/bedrock/Makefile.am: new
+	* src/main/bedrock/config/Makefile.am: new
+	* src/main/bedrock/config/captcha.xml.in: new
+	* src/main/bedrock/htdocs/Makefile.am: new
+	* src/main/bedrock/htdocs/captcha-example.roc: new
