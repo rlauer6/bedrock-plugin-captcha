@@ -1,3 +1,15 @@
+Fri Feb 21 17:19:14 2025  Rob Lauer  <rlauer6@comcast.net>
+
+	[2.0.1]:
+	* README.md: generated
+	* lib/BLM/Startup/Captcha.pm
+	- pod tweaks
+	- add set/get config
+	(init_plugin)
+	- refactored a bit
+	- better error handling when session is not available
+	* extra-files: added captcha.roc
+
 Thu Feb 20 09:00:54 2025  Rob Lauer  <rlauer6@comcast.net>
 
 	[2.0.0 - repackaging]:

@@ -9,7 +9,7 @@ use Authen::Captcha;
 use Data::Dumper;
 use English qw(-no_match_vars);
 
-our $VERSION = '2.0.0';
+our $VERSION = '2.0.1';
 
 use parent qw(Bedrock::Application::Plugin Class::Accessor::Fast);
 
@@ -22,6 +22,7 @@ __PACKAGE__->mk_accessors(
     data_folder
     output_folder
     verify_folders
+    config
   )
 );
 
@@ -45,35 +46,50 @@ sub init_plugin {
   my ($self) = @_;
 
   $self->set_captcha( Authen::Captcha->new );
-  my $config = $self->config;
 
-  if ( $config->get('use_session') ) {
+  my $config = $self->config;
+  $self->set_config($config);
+
+  my $session = $self->session;
+
+  my $use_session = $config->get('use_session');
+
+  if ( $use_session && $session ) {
+
     my $data_folder = eval {
-      $self->set_output_folder( $self->session->create_session_dir );
-      return $self->set_data_folder( $self->session->create_session_dir );
+      my $session_dir = $session->create_session_dir;
+      $self->set_output_folder($session_dir);
+
+      return $self->set_data_folder($session_dir);
     };
 
     die "no output folder\n$EVAL_ERROR"
       if $EVAL_ERROR || !$data_folder;
+  }
+  elsif ($use_session) {
+    die "no session object\n";
   }
   else {
     $self->set_output_folder( $config->get('output_folder') );
     $self->set_data_folder( $config->get('data_folder') );
   }
 
+  my $data_folder   = $self->get_data_folder;
+  my $output_folder = $self->get_outtpu_folder;
+
   my $verify_folders = $config->get('verify_folders');
 
   if ( ( !defined $verify_folders ) || $verify_folders ) {
     die "No directory for data folder.\n"
-      if !-d $self->get_data_folder();
+      if !$data_folder || !-d $data_folder;
 
     die "No directory for output folder.\n"
-      if !-d $self->get_output_folder();
+      if !$output_folder || !-d $output_folder;
   }
 
-  $self->get_captcha->data_folder( $self->get_data_folder() );
+  $self->get_captcha->data_folder($data_folder);
 
-  $self->get_captcha->output_folder( $self->get_output_folder() );
+  $self->get_captcha->output_folder($output_folder);
 
   return $TRUE;
 }
@@ -296,12 +312,19 @@ Boolean that indicates whether or not to verify the existence of the
 folders. You can set the folders after instantiation of the class
 using the C<output_folder()> and C<data_folder()> methods.
 
+=item * use_session
+
+Boolean that determines if the session directory should be used for
+storing the Captcha image. If this is set to a true value, then
+C<output_path> is ignored.
+
+default: false
+
 =back
 
 Configure these values based on your needs.  Since the
 C<output_folder> will serve up your graphic, it will require
 appropriate permissions.
-
 
 =head2 Using a Session Directory as the C<output_folder>
 
@@ -314,7 +337,7 @@ Using session directories has a couple of advantages:
 
 =over 5
 
-=item * restricts access of the captcha image to a specific user
+=item * restricts access of the Captcha image to a specific user
 
 =item * session directories can be cleaned up automatically up after a session expires
 
@@ -323,6 +346,14 @@ webserver nodes (an NFS or EFS mount e.g) will help create a stateless
 webnode
 
 =back
+
+If you use the session directory as your Captcha image directory and
+are using L<Bedrock::Apache::BedrockSessionFiles> handler to serve
+content from session directories by default the handler will attempt
+to verify that there exists a login session for the user. If you want
+to allow anonymous sessions when using this plugin, you will need to
+configure the handler so that it does not verify that user has a login
+session.
 
 See L<Bedrock::Apache::BedrockSessionFiles> for details on setting up
 session directories.
@@ -334,13 +365,13 @@ session directories.
 image( [num-digits] )
 
 Creates and returns the name of an image composed of C<num-digits>
-characters and sets the C<md5sum> element of the object. B<This method is not designed to be used directly.>
+characters and sets the C<md5sum> element of the object. B<This method
+is not designed to be used directly.>
 
 I<Use C<image_url()> to return the URL of the image.>
 
 <img src="<var $captcha.image_url(5)>">&nbsp;<input type="text" name="code" size="5">
 <input type="hidden" name="md5sum" value="<var $captcha.md5sum>">
-
 
 =head2 verify
 
@@ -376,7 +407,10 @@ code instead of a return code.
 
 =head2 image_url
 
-Returns the URL for the captcha image.
+Returns the URL for the Captcha image.  The URL is a mash-up of the
+path to the image and the value you set for C<image_url> in the
+configuration file.  If you set C<use_session> to 1, then then
+C<image_url> setting is not used.
 
 =head2 verify_or_reset_image
 
